@@ -18,7 +18,7 @@ Quelques notions importantes :
     - chaque service a une fonctionnalité bien définie, facilite la maintenance
     - interconnexion des services nécessite des interfaces bien définies
     - complexité déplacée au niveau de l'orchestration de l'application globale
-- **Application Cloud Native** : application orientée microservies, packagée dans des containers
+- **Application Cloud Native** : application orientée microservices, packagée dans des containers
 - **Devops** : moyen de réduire le temps de livraison d'une fonctionnalité
     - rapprochement des développeurs et des opérateurs des plateformes de production
     - automatisation des processus via des pipelines
@@ -111,3 +111,6 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 - en production, il faut un cluster hautement disponible. En cas de problème, il faut qu'il continue à tourner correctement
 - **Cluster Kubernetes managé** : administré par une entreprise tierce (gestion du cluster et des mises à jour), par exemple *Google Kubernetes Engine*, *Azure Container Service*, *Amazon Elastic Container Service*, *Digital Ocean*, *OVH*...
 -  installation de Kubernetes soi-même sur des machines physiques ou virtuelles, avec des outils comme *kubeadm*, *kops*...
+
+
+## Les objets Pod
