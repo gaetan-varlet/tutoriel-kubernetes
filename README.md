@@ -103,6 +103,11 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 - **Minikube** : logiciel ayant besoin d'un hyperviseur, qui peut lancer une machine virtuelle sur laquelle tournera l'ensemble des processus de Kubernetes (cluster ayant un seul node)
 - **Kind** : (Kubernetes in Docker) logiciel permettant de lancer un Kubernetes en local. Chaque node du cluster va tourner dans un conteneur Docker
 - **MicroK8s** : distribution légère à installer dans une VM
+    - création d'une VM Ubuntu : `multipass launch --name microk8s --mem 4G`
+    - installation de microk8s dans la VM : `multipass exec microk8s -- sudo snap install microk8s --classic`
+    - récupération sur notre machine locale du fichier de configuration généré par microk8s : `multipass exec microk8s -- sudo microk8s.config > microk8s.yaml`
+    - positionnement de la variable d'environnement KUBECONFIG sur le fichier de configuration : `export KUBECONFIG=$PWD/microk8s.yaml`
+    - test en regardant les nodes du cluster : `kubectl get nodes`
 - **K3S** : distribution Kubernetes très light, également à installer dans une VM
 
 
