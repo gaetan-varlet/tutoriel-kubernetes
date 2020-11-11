@@ -113,4 +113,27 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 -  installation de Kubernetes soi-même sur des machines physiques ou virtuelles, avec des outils comme *kubeadm*, *kops*...
 
 
-## Les objets Pod
+## Les objets Pod
+
+- plus petite unité applicative dans Kubernetes
+- groupe de containers tournant dans un même contexte d'isolation
+- partagent la stack réseau (les containers peuvent communiquer sur localhost) et le stockage (via des volumes)
+- chaque Pod a une adresse IP dédiée dans le cluster
+- peut contenir des containers (souvent un seul container applicatif) et des volumes
+- Scaling horizontal via le nombre de replica d'un Pod
+
+### Spécification
+
+Exemple de spécification d'un Pod dans lequel est lancé un container basé sur l'image nginx (serveur web)
+
+```yml
+$ cat nginx-pod.yaml
+apiVersion: v1 # définition de la version de l'API utilisé par la version des Pod
+kind: Pod # type d'objet
+metadata: # ajout d'un nom, d'autres metadata peuvent être ajoutées (labels,...)
+    name: nginx 
+spec: # spécifications du POd (containers, volumes utilisées dans le Pod)
+    containers: # définition d'un seul container qu'on appelle www basé sur l'image nginx en version 1.12.2
+    - name: www
+        image: nginx:1.12.2
+```
