@@ -85,11 +85,6 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 
 ## Cluster de développement
 
-- **Minikube** : logiciel ayant besoin d'un hyperviseur, qui peut lancer une machine virtuelle sur laquelle tournera l'ensemble des processus de Kubernetes (cluster ayant un seul node)
-- **Kind** : (Kubernetes in Docker) logiciel permettant de lancer un Kubernetes en local. Chaque node du cluster va tourner dans un conteneur. Nécessite Docker et l'installation de Kind puis de lancer par exemple a commande `kind create cluster`
-- **MicroK8s**
-- **K3S**
-
 **Multipass**
 - utilitaire permettant de créer des machines virtuelles Ubuntu facilement et peut utiliser différents hyperviseur de façon native (Hyper-V, HyperKit, KVM, VirtualBox)
 - `multipass launch -n node1` crée une VM nommée *node1* avec 1Go de Ram, 1 cpu et 5Go de disque
@@ -104,3 +99,15 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 - `start`, `stop`, et `delete` permettent de gérer le cycle de vie des VM
     - `multipart delete node1`
 - `multipass purge` supprime définitivement les VM supprimées
+
+- **Minikube** : logiciel ayant besoin d'un hyperviseur, qui peut lancer une machine virtuelle sur laquelle tournera l'ensemble des processus de Kubernetes (cluster ayant un seul node)
+- **Kind** : (Kubernetes in Docker) logiciel permettant de lancer un Kubernetes en local. Chaque node du cluster va tourner dans un conteneur Docker
+- **MicroK8s** : distribution légère à installer dans une VM
+- **K3S** : distribution Kubernetes très light, également à installer dans une VM
+
+
+## Cluster de production
+
+- en production, il faut un cluster hautement disponible. En cas de problème, il faut qu'il continue à tourner correctement
+- **Cluster Kubernetes managé** : administré par une entreprise tierce (gestion du cluster et des mises à jour), par exemple *Google Kubernetes Engine*, *Azure Container Service*, *Amazon Elastic Container Service*, *Digital Ocean*, *OVH*...
+-  installation de Kubernetes soi-même sur des machines physiques ou virtuelles, avec des outils comme *kubeadm*, *kops*...
