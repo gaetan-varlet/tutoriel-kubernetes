@@ -151,6 +151,13 @@ spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
 - logs d'un container d'un Pod : `kubectl logs POD_NAME [-c CONTAINER_NAME]`
 - lancement d'une commande dans un container d'un Pod existant `kubectl exec POD_NAME [-c CONTAINER_NAME] -- COMMAND`
 - suppression d'un Pod `kubectl delete pod POD_NAME`
+- publication du port d'un Pod sur la machine hôte : `kubectl port-forward POD_NAME HOST_PORT:CONTAINER_PORT`, utilisé pour le développement et le debugging
+- container pause
+    - `docker ps | grep www` pour afficher les containers sur la machine en filtrant sur le nom www
+    - il y a 2 containers : un container nginx et un container basé sur l'image *pause*
+    - garant des namespaces qui est utilisé pour isoler les processus du pod
+    - les containers du pod utilisent ces mêmes namespaces pour communiquer entre eux sur l'interface localhost
+
 
 Exemple
 
@@ -173,17 +180,13 @@ kubectl exec -t -i www -- /bin/bash
 # Détails du pod
 kubectl describe pod www
 
+# le port 80 du container nginx qui tourne dans le pod www est exposé sur le port 8080 de la machine hôte
+# Accès à la page d'accueil de nginx via localhost:8080
+kubectl port-forward www 8080:80
+
 # Suppression du Pod
 kubectl delete pod www
 ```
-
-- publication du port d'un Pod sur la machine hôte : `kubectl port-forward POD_NAME HOST_PORT:CONTAINER_PORT`, utilisé pour le développement et le debugging
-    - `kubectl port-forward www 8080:80` : le port 80 du container nginx qui tourne dans le pod www est exposé sur le port 8080 de la machine. Accès à la page d'accueil de nginx via localhost:8080
-- container pause
-    - `docker ps | grep www` pour afficher les containers sur la machine en filtrant sur le nom www
-    - il y a 2 containers : un container nginx et un container basé sur l'image *pause*
-    - garant des namespaces qui est utilisé pour isoler les processus du pod
-    - les containers du pod utilisent ces mêmes namespaces pour communiquer entre eux sur l'interface localhost
 
 ### Pod avec plusieurs containers
 
