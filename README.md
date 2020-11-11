@@ -136,10 +136,10 @@ $ cat nginx-pod.yaml
 apiVersion: v1 # définition de la version de l'API utilisé par la version des Pod
 kind: Pod # type d'objet
 metadata: # ajout d'un nom, d'autres metadata peuvent être ajoutées (labels,...)
-  name: nginx 
+  name: www 
 spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
   containers: # définition d'un seul container qu'on appelle www basé sur l'image nginx en version 1.12.2
-  - name: www
+  - name: nginx
     image: nginx:1.12.2
 ```
 
@@ -163,6 +163,7 @@ kubectl get pods
 
 # Lancement d'une commande dans un Pod (pas besoin de préciser le container comme c'est le seul dans le pod)
 kubectl exec www -- nginx -v
+kubectl exec www -c nginx -- nginx -v # équivalent en précisant le container dans le pod
 # nginx version: nginx/1.12.3
 
 # Shell interactif dans un Pod (utilisé pour faire du débug)
