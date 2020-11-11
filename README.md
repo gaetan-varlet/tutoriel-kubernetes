@@ -113,7 +113,7 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 -  installation de Kubernetes soi-même sur des machines physiques ou virtuelles, avec des outils comme *kubeadm*, *kops*...
 
 
-## Les objets Pod
+## L'objet Pod
 
 - plus petite unité applicative dans Kubernetes
 - groupe de containers tournant dans un même contexte d'isolation
@@ -131,9 +131,130 @@ $ cat nginx-pod.yaml
 apiVersion: v1 # définition de la version de l'API utilisé par la version des Pod
 kind: Pod # type d'objet
 metadata: # ajout d'un nom, d'autres metadata peuvent être ajoutées (labels,...)
-    name: nginx 
-spec: # spécifications du POd (containers, volumes utilisées dans le Pod)
-    containers: # définition d'un seul container qu'on appelle www basé sur l'image nginx en version 1.12.2
-    - name: www
-        image: nginx:1.12.2
+  name: nginx 
+spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
+  containers: # définition d'un seul container qu'on appelle www basé sur l'image nginx en version 1.12.2
+  - name: www
+    image: nginx:1.12.2
 ```
+
+### Gestion du cycle de vie d'un Pod
+
+- lancement d'un Pod : `kubectl create -f POD_SPECIFICATION.yaml`
+- liste des Pods : `kubectl get pod` (par défaut sur le namespace default)
+- description d'un Pod : `kubectl describe pod POD_NAME` donne les détails du Pod
+- logs d'un container d'un Pod : `kubectl logs POD_NAME [-c CONTAINER_NAME]`
+- lancement d'une commande dans un container d'un Pod existant `kubectl exec POD_NAME [-c CONTAINER_NAME] -- COMMAND`
+- suppression d'un Pod `kubectl delete pod POD_NAME`
+
+Exemple
+
+```bash
+# Lancement du Pod
+kubectl create -f nginx-pod.yaml
+
+# Liste des Pods présents pour vérifier que notre Pod est présent
+kubectl get pods
+
+# Lancement d'une commande dans un Pod (pas besoin de préciser le container comme c'est le seul dans le pod)
+kubectl exec www -- nginx -v
+# nginx version: nginx/1.12.3
+
+# Shell interactif dans un Pod (utilisé pour faire du débug)
+kubectl exec -t -i www -- /bin/bash
+# root@nginx:/#
+
+# Détails du pod
+kubectl describe pod www
+
+# Suppression du Pod
+kubectl delete pod www
+```
+
+- publication du port d'un Pod sur la machine hôte : `kubectl port-forward POD_NAME HOST_PORT:CONTAINER_PORT`, utilisé pour le développement et le debugging
+    - `kubectl port-forward www 8080:80` : le port 80 du container nginx qui tourne dans le pod www est exposé sur le port 8080 de la machine. Accès à la page d'accueil de nginx via localhost:8080
+- container pause
+    - `docker ps | grep www` pour afficher les containers sur la machine en filtrant sur le nom www
+    - il y a 2 containers : un container nginx et un container basé sur l'image *pause*
+    - garant des namespaces qui est utilisé pour isoler les processus du pod
+    - les containers du pod utilisent ces mêmes namespaces pour communiquer entre eux sur l'interface localhost
+
+### Pod avec plusieurs containers
+
+- exemple avec Wordpress (pas utilisable en production car non scalable)
+- définition de 2 containers dans le même pod
+    - moteur Wordpress
+    - base de données MySQL
+- Définition d'un volume pour la persistence des données de la base
+    - type **emptyDir** : associé au cyclé de vie du Pod
+    - répertoire vide créé sur la machine hôte lors de la création du Pod, et utilisé par le Pod pour y stocker les fichiers de MySQL
+    - créé dans le Pod et utilisé dans un ou des containers du pod. Les données du container vont donc être stockées dans le volume et non dans le container, comme ça si le container meurt, les données ne sont pas perdus car le volume est lié au cycle de vie du Pod et non du container
+
+Exemple du fichier de spécifications du Pod : 2 containers (Wordpress et MySQL)
+
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wp
+spec:
+  containers:
+  - image: wordpress:4.9-apache
+    name: wordpress
+    env: # ajout de 2 variables d'environnement dans le container WORDPRESS
+    - name: WORDPRESS_DB_PASSWORD
+      value: mysqlpwd
+    - name: WORDPRESS_DB_HOST
+      value: 127.0.0.1
+  - image: mysql:5.7
+    name: mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: mysqlpwd
+    volumeMounts: # définition d'un volume dans le pod en plus des 2 containers
+    - name: data
+      mountsPath: /var/lib/mysql # répertoire de la machine hôte que l'on monte dans le répertoire indiqué du container MySQL
+  volumes:
+  - name: data
+    emptyDir: {}
+```
+
+- création du pod avec les 2 containers : `kubectl create -f wordpress-pod.yaml`
+- exposition du port 80 du container wordpress : `kubectl port-forward wp 8080:80`, et accès via localhost:8080 (les 2 containers communiquent donc entre-eux en local)
+
+
+## L'objet Service
+
+## L'objet Deployment
+
+## L'objet Namespace
+
+## Exemple : Application micro-services
+
+##  Kubectl
+
+## L'objet ConfigMap
+
+## Exemple : Stack Elastic (ELK)
+
+## L'objet Secret
+
+## Utilsateurs et droits d'accès - RBAC
+
+## Interface web de gestion
+
+## DaemonSet
+
+## Job - CronJob
+
+## L'objet Ingress
+
+## Kubernetes Operators
+
+## Workload stateful
+
+## Helm
+
+## Exemple : Intégration et Déploiement continue
+
+## ServiceMesh
