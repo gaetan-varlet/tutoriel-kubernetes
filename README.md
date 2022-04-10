@@ -44,7 +44,7 @@ Quelques notions importantes :
 - **Pods** : plus petite unité applicative sur Kubernetes. C'est un ensemble de containers qui partagent une stack réseau et du stockage.
     - le nombre d'instance d'un pod est appelé **replicas**
     - gestion des pods identiques : utilisation d'une ressource **Deployment** pour spécifier la version de l'image, le nombre de replicas...
-- **Service** : regroupement de pods similaires, qui expose les pods à l'intérieur ou à l'extérieur du cluster, en définissant de règles au niveau réseau
+- **Service** : regroupement de pods similaires, qui expose les pods à l'intérieur ou à l'extérieur du cluster, en définissant des règles au niveau réseau
 - à chaque ressource, possibilité d'attacher des informations supplémentaires avec les **Labels** et les **Annotations**, sous forme de clé et de valeur
 - communcation avec Kubernetes via la commande **kubectl** qui envoie des requêtes HTTPS à l'API Server
 
@@ -87,7 +87,7 @@ Lorsqu'on communique avec plusieurs clusters Kubernetes
 
 **Multipass**
 - utilitaire permettant de créer des machines virtuelles Ubuntu facilement et peut utiliser différents hyperviseur de façon native (Hyper-V, HyperKit, KVM, VirtualBox)
-- `multipass launch -n node1` crée une VM nommée *node1* avec 1Go de Ram, 1 cpu et 5Go de disque
+- `multipass launch -n node1` crée une VM nommée *node1* avec 1Go de Ram, 1 CPU et 5Go de disque
     - `multipass launch -n node2 -c 2 -m 3G -d 10G` permet de personnaliser la conf
 - `multipass list` liste des VM créés
 - `multipass info node1` donne des infos sur la conf de la VM *node1*
