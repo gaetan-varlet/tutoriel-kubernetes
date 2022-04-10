@@ -2,7 +2,7 @@
 
 ## Introduction
 
-- logiciel opensource créé par Gooogle
+- logiciel opensource créé par Google
 - orchestrateur : permet d'automatiser le déploiement et la gestion d'applications tournant dans des conteneurs
 - concurrent : Docker Swarm et Docker Compose
 
