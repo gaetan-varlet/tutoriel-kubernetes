@@ -222,7 +222,7 @@ spec:
       value: mysqlpwd
     volumeMounts: # définition d'un volume dans le pod en plus des 2 containers
     - name: data
-      mountsPath: /var/lib/mysql # répertoire de la machine hôte que l'on monte dans le répertoire indiqué du container MySQL
+      mountPath: /var/lib/mysql # répertoire de la machine hôte que l'on monte dans le répertoire indiqué du container MySQL
   volumes:
   - name: data
     emptyDir: {}
