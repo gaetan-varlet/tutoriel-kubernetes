@@ -191,6 +191,9 @@ kubectl describe pod www
 # Accès à la page d'accueil de nginx via localhost:8080
 kubectl port-forward www 8080:80
 
+# Affichage des logs
+kubectl logs www
+
 # Suppression du Pod
 kubectl delete pod www
 ```
