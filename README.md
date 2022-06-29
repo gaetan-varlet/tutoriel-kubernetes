@@ -106,23 +106,24 @@ Configuration pour travailler avec plusieurs clusters Kubernetes
     - `multipart delete node1`
 - `multipass purge` supprime définitivement les VM supprimées
 
-- **Minikube** : logiciel ayant besoin d'un hyperviseur, qui peut lancer une machine virtuelle sur laquelle tournera l'ensemble des processus de Kubernetes (cluster ayant un seul node)
-- **Kind** : (Kubernetes in Docker) logiciel permettant de lancer un Kubernetes en local. Chaque node du cluster va tourner dans un conteneur Docker
-- **MicroK8s** : distribution légère à installer dans une VM
-    - création d'une VM Ubuntu : `multipass launch --name microk8s --mem 4G`
-    - installation de microk8s dans la VM : `multipass exec microk8s -- sudo snap install microk8s --classic`
-    - récupération sur notre machine locale du fichier de configuration généré par microk8s : `multipass exec microk8s -- sudo microk8s.config > microk8s.yaml`
-    - positionnement de la variable d'environnement KUBECONFIG sur le fichier de configuration : `export KUBECONFIG=$PWD/microk8s.yaml`
-    - test en regardant les nodes du cluster : `kubectl get nodes`
-- **K3S** : distribution Kubernetes très light, également à installer dans une VM
-
+**Minikube** : logiciel ayant besoin d'un hyperviseur, qui peut lancer une machine virtuelle sur laquelle tournera l'ensemble des processus de Kubernetes (cluster ayant un seul node)
+**Kind** : (Kubernetes in Docker) logiciel permettant de lancer un Kubernetes en local. Chaque node du cluster va tourner dans un conteneur Docker
+**K3S** : distribution Kubernetes très light, à installer dans une VM
+**MicroK8s** : distribution légère à installer dans une VM
+  - création d'une VM Ubuntu : `multipass launch --name microk8s --mem 4G`
+  - installation de microk8s dans la VM : `multipass exec microk8s -- sudo snap install microk8s --classic`
+  - récupération sur notre machine locale du fichier de configuration généré par microk8s : `multipass exec microk8s -- sudo microk8s.config > microk8s.yaml`
+  - positionnement de la variable d'environnement KUBECONFIG sur le fichier de configuration : `export KUBECONFIG=$PWD/microk8s.yaml`
+  - test en regardant les nodes du cluster : `kubectl get nodes`
 
 ## Cluster de production
 
-- en production, il faut un cluster hautement disponible. En cas de problème, il faut qu'il continue à tourner correctement
-- **Cluster Kubernetes managé** : administré par une entreprise tierce (gestion du cluster et des mises à jour), par exemple *Google Kubernetes Engine*, *Azure Container Service*, *Amazon Elastic Container Service*, *Digital Ocean*, *OVH*...
--  installation de Kubernetes soi-même sur des machines physiques ou virtuelles, avec des outils comme *kubeadm*, *kops*...
-
+En production, il faut un cluster hautement disponible. En cas de problème, il faut qu'il continue à tourner correctement
+- **Cluster Kubernetes managé** : administré par une entreprise tierce (gestion du cluster et des mises à jour)
+  - exemples : *Google Kubernetes Engine*, *Azure Container Service*, *Amazon Elastic Container Service*, *Digital Ocean*, *OVH*...
+  - généralement, création d'un cluster depuis l'interface web ou en ligne de commande en téléchargeant un binaire
+-  installation  **on premise** de Kubernetes soi-même sur des machines physiques ou virtuelles
+  - utilisation d'outils comme *kubeadm*, *kops*, *kubespray*, *Rancher*, *Pharos*, *Docker EE*, ...
 
 ## L'objet Pod
 
