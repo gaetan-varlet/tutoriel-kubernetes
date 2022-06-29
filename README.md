@@ -132,7 +132,8 @@ En production, il faut un cluster hautement disponible. En cas de problème, il 
 - partagent la stack réseau (les containers peuvent communiquer sur localhost) et le stockage (via des volumes)
 - chaque Pod a une adresse IP dédiée dans le cluster
 - peut contenir des containers (souvent un seul container applicatif) et des volumes
-- Scaling horizontal via le nombre de replica d'un Pod
+- basé sur une spécification sui définit les conteneurs qui tourneront dans le pod
+- **scaling horizontal** via le nombre de replicas d'un Pod
 
 ### Spécification
 
@@ -145,7 +146,7 @@ kind: Pod # type d'objet
 metadata: # ajout d'un nom, d'autres metadata peuvent être ajoutées (labels,...)
   name: www 
 spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
-  containers: # définition d'un seul container qu'on appelle www basé sur l'image nginx en version 1.12.2
+  containers: # définition d'un seul container qu'on appelle nginx basé sur l'image nginx en version 1.12.2
   - name: nginx
     image: nginx:1.12.2
 ```
@@ -153,20 +154,19 @@ spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
 ### Gestion du cycle de vie d'un Pod
 
 - lancement d'un Pod : `kubectl create -f POD_SPECIFICATION.yaml`
-- liste des Pods : `kubectl get pod` (par défaut sur le namespace default)
-- description d'un Pod : `kubectl describe pod POD_NAME` donne les détails du Pod
-- logs d'un container d'un Pod : `kubectl logs POD_NAME [-c CONTAINER_NAME]`
-- lancement d'une commande dans un container d'un Pod existant `kubectl exec POD_NAME [-c CONTAINER_NAME] -- COMMAND`
+- lister les Pods (par défaut sur le namespace default) : `kubectl get pod`
+- description d'un Pod (donne les détails du Pod) : `kubectl describe pod POD_NAME`
+- logs d'un container d'un Pod : `kubectl logs POD_NAME [-c CONTAINER_NAME]` (`-c` pour obtenir les logs d'un conteneur particulier dans le pod)
+- lancement d'une commande dans le conteneur d'un Pod existant `kubectl exec POD_NAME [-c CONTAINER_NAME] -- COMMAND`
 - suppression d'un Pod `kubectl delete pod POD_NAME`
 - publication du port d'un Pod sur la machine hôte : `kubectl port-forward POD_NAME HOST_PORT:CONTAINER_PORT`, utilisé pour le développement et le debugging
 - container pause
     - `docker ps | grep www` pour afficher les containers sur la machine en filtrant sur le nom www
     - il y a 2 containers : un container nginx et un container basé sur l'image *pause*
     - garant des namespaces qui est utilisé pour isoler les processus du pod
-    - les containers du pod utilisent ces mêmes namespaces pour communiquer entre eux sur l'interface localhost
+    - les containers du pod utilisent ces mêmes namespaces pour communiquer entre-eux sur l'interface localhost
 
-
-Exemple
+**Exemple**
 
 ```bash
 # Lancement du Pod
