@@ -11,9 +11,10 @@ Quelques notions importantes :
 - **Docker** a facilité l'utilisation des conteneurs
     - notion d'**image** : modèle qui package une application et ses dépendances, instancié dans un conteneur, qui permettent de lancer le ou les processus de l'application définie dans l'image
     - **Matrix from hell** : Docker permet de déployer n'importe quel application sur une multitude d'environnements
-    - **Docker Hub** : bibliothèque d'image Docker prête à l'emploi, on peut également y déposer nos images
+    - **Docker Hub** : bibliothèque d'images Docker prêtes à l'emploi, on peut également y déposer nos images
 - **Architecture monolithique vs micro-services**
-    - découpage de multiples services
+    - découpage de l'application en multiples services
+    - taille réduite : facilite le développement, les tests et la maintenance
     - possibilité de choisir des technologies différentes selon les services
     - chaque service a une fonctionnalité bien définie, facilite la maintenance
     - interconnexion des services nécessite des interfaces bien définies
@@ -29,28 +30,36 @@ Quelques notions importantes :
 ### Le projet
 
 - Kubernetes / k8s / kube
-- signifie "Homme de barre" ou "pilote" en grec
+- signifie "Homme de barre" ou "Pilote" en grec
 - sortie en 2015
 - orchestration de containers : gestion d'applications tournant dans des containers (déploiement, montée en charge, mise à jour...)
 - gestion des services stateless et stateful
 - gestion de la configuration et des secrets
-- spécification des ressources en **yaml**
+- lancement de batchs
+- spécification des ressources dans des fichiers au format **yaml**
 
 ### Les concepts de base
 
 - **Cluster** : (groupe en français) ensemble de **nodes** (machines physiques ou virtuelles) Linux ou Windows
-    - Node **master** en charge de la gestion du cluster : expose l'**API Server**
-    - Node **worker** en charge de faire tourner les applications
+  - Node **master** en charge de la gestion du cluster : expose l'**API Server**, le point d'entrée pour la gestion du cluster
+  - Node **worker** en charge de faire tourner les applications
 - **Pods** : plus petite unité applicative sur Kubernetes. C'est un ensemble de containers qui partagent une stack réseau et du stockage.
-    - le nombre d'instance d'un pod est appelé **replicas**
-    - gestion des pods identiques : utilisation d'une ressource **Deployment** pour spécifier la version de l'image, le nombre de replicas...
+  - le nombre d'instances d'un pod est appelé **replicas**
+- **Deployment** :ressoure qui permet la gestion des pods identiques
+  - permet de spécifier la version de l'image, le nombre de replicas...
 - **Service** : regroupement de pods similaires, qui expose les pods à l'intérieur ou à l'extérieur du cluster, en définissant des règles au niveau réseau
-- à chaque ressource, possibilité d'attacher des informations supplémentaires avec les **Labels** et les **Annotations**, sous forme de clé et de valeur
-- communcation avec Kubernetes via la commande **kubectl** qui envoie des requêtes HTTPS à l'API Server
+
+À chaque ressource, il est possible d'attacher des informations supplémentaires avec les **Labels** (pour la sélection d'objets) et les **Annotations** (utilisées par des outils et librairies clientes), sous forme de clé et de valeur
+
+Communcation avec Kubernetes en envoyant des requêtes HTTPS à l'API Server :
+- **kubectl** : outil en ligne de commande
+  - récupération du fichier de configuration du serveur (URL du serveur, éléments d'authentification)
+  - configuration du client avec ce fichier `${HOME}/.kube/config`, `${KUBECONFIG}`, `--kubeconfig` (à chaque commande *kubectl* pour ce dernier)
+- utilisation d'autres interfaces (Web / Command-Line Interface)
 
 ### Architecture
 
-- **Katacoda** : plateforme d'apprentissage des technologies "Cloud Native", notamment Kubenertes
+**Katacoda** : plateforme d'apprentissage des technologies "Cloud Native", notamment Kubenertes
 - `kubectl version` permet de connaître la version
 - `kubectl get nodes` permet de voir les noeuds du cluster
 
@@ -63,25 +72,22 @@ Processus tournant sur les nodes **Master**. Ils fournissent le plan de contrôl
 Processus tournant sur les nodes **Master** et **Worker** :
 - **kubelet** : assure que les containers d'un pod tournent conformément à la spécification, redémarre les containers en cas de crash
 - **kube-proxy** : gère les règles réseau pour l'exposition des services
-- **container-runtime** : environnement d'exécution des containers (Docker)
+- **container-runtime** : environnement d'exécution des containers (Docker par défaut)
 
-Un *namespace* permet de grouper et d'isoler des ressources
+Un **namespace** permet de grouper et d'isoler des ressources
 - `kubectl get pods` permet de voir les pods qui tournent dans le cluster dans le namespace par défaut
-- `kubectl get pods -A` permet de lister les pods qui tournent dans tous les namespaces, notamment le namespace *kube-system* qui sont les composants qui permettent la gestion du cluster
+- `kubectl get pods -A` permet de lister les pods qui tournent dans tous les namespaces, notamment le namespace **kube-system** qui sont les composants qui permettent la gestion du cluster
 - `kubectl get pod -n kube-system`  permet de lister les pods d'un namespace particulier
 
 **API Server**
 - API Rest
 - permet de lister, créer, supprimer des ressources dans le cluster
-- appel via des requêtes HTTP, ou via *kubectl*, via une interface web...
+- appel via des requêtes HTTP, ou via **kubectl**, via une interface web...
 - chaque requête passe dans un pipeline : authentification, autorisation, admission contrôleurs
 
-Lorsqu'on communique avec plusieurs clusters Kubernetes
+Configuration pour travailler avec plusieurs clusters Kubernetes
 - définition du **Context** pour définir à quel cluster on s'adresse et avec quel utilisateur
-- par défaut, défini dans `${HOME}/.kube/config`
-- possibilité de le définir dans la variable d'environnement `$KUBECONFIG` ou dans chaque commande avec l'option `--kubeconfig`
 - l'utilitaire **kubectx** simplifie cela
-
 
 ## Cluster de développement
 
