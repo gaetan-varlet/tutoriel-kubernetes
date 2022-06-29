@@ -171,6 +171,7 @@ spec: # spécifications du Pod (containers, volumes utilisées dans le Pod)
 ```bash
 # Lancement du Pod
 kubectl create -f nginx-pod.yaml
+kubectl apply -f nginx-pod.yaml # équilavent à create, sans générer d'erreur s'il existe déjà
 
 # Liste des Pods présents pour vérifier que notre Pod est présent
 kubectl get pods
@@ -205,7 +206,7 @@ kubectl delete pod www
     - moteur Wordpress
     - base de données MySQL
 - Définition d'un volume pour la persistence des données de la base
-    - type **emptyDir** : associé au cyclé de vie du Pod
+    - type **emptyDir** : associé au cycle de vie du Pod
     - répertoire vide créé sur la machine hôte lors de la création du Pod, et utilisé par le Pod pour y stocker les fichiers de MySQL
     - créé dans le Pod et utilisé dans un ou des containers du pod. Les données du container vont donc être stockées dans le volume et non dans le container, comme ça si le container meurt, les données ne sont pas perdus car le volume est lié au cycle de vie du Pod et non du container
 
@@ -234,11 +235,11 @@ spec:
     - name: data
       mountPath: /var/lib/mysql # répertoire de la machine hôte que l'on monte dans le répertoire indiqué du container MySQL
   volumes:
-  - name: data
+  - name: data # définition d'un volume : répertoire sur la machine hôte
     emptyDir: {}
 ```
 
-- création du pod avec les 2 containers : `kubectl create -f wordpress-pod.yaml`
+- création du pod avec les 2 containers : `kubectl apply -f wordpress-pod.yaml`
 - exposition du port 80 du container wordpress : `kubectl port-forward wp 8080:80`, et accès via localhost:8080 (les 2 containers communiquent donc entre-eux en local)
 
 
